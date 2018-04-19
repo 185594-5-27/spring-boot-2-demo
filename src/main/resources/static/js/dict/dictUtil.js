@@ -27,23 +27,43 @@ if(dictCodeMap==undefined){
 
 // 根据type和value来获取数据字典的code值
 function getCodeDictCode(type,value){
-    return dictCodeMap.get(type+"_"+value).split("|")[0];
+    try{
+        return dictCodeMap.get(type+"_"+value).split("|")[0];
+    }catch (e){
+        return "";
+    }
+
 }
 
 // 根据type和value来获取数据字典的text值
 function getCodeDictText(type,value){
-    return dictCodeMap.get(type+"_"+value).split("|")[1];
+    try{
+        return dictCodeMap.get(type+"_"+value).split("|")[1];
+    }catch (e){
+        return "";
+    }
+
 }
 
 //根据type和code来获取数据字典的value值
 function getDictValue(type,code){
-    var value = dictValueMap.get(type+"_"+code);
-    return value.split("|")[0];
+    try{
+        var value = dictValueMap.get(type+"_"+code);
+        return value.split("|")[0];
+    }catch (e){
+        return "";
+    }
+
 }
 //根据type和code来获取数据字典的text值
 function getDictText(type,code){
-    var value = dictValueMap.get(type+"_"+code);
-    return value.split("|")[1];
+    try{
+        var value = dictValueMap.get(type+"_"+code);
+        return value.split("|")[1];
+    }catch (e){
+        return "";
+    }
+
 }
 // 根据type来获取value的值
 function getSelectOption(type,id,select){
