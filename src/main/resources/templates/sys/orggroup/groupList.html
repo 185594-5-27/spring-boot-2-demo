@@ -38,9 +38,14 @@
     function addHoverDom(treeId, treeNode) {
         var sObj = $("#" + treeNode.tId + "_span");
         if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
-        var addStr = "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='add node' onfocus='this.blur();'></span>";
-        addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "'></span>";
-        addStr += "<span class='button edit' id='editBtn_" + treeNode.tId + "'></span>";
+        var addStr = "";
+        if(treeNode.tId=='tree_1'){
+            addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "'></span>";
+        }else{
+            addStr = "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='add node' onfocus='this.blur();'></span>";
+            addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "'></span>";
+            addStr += "<span class='button edit' id='editBtn_" + treeNode.tId + "'></span>";
+        }
         sObj.after(addStr);
         var btn = $("#addBtn_"+treeNode.tId);
         if (btn) btn.bind("click", function(){

@@ -1,6 +1,8 @@
 package com.sb2.demo.sys.entity;
 
 
+import java.util.Date;
+
 /**
  *@author linzf
  **/
@@ -12,8 +14,38 @@ public class OrgGroup {
 	private String node;
 	private long num;
 	private String parentNode;
+	// 创建人ID
+	private int createId;
+	// 创建人名字
+	private String createName;
+	// 创建时间
+	private Date createTime;
 	// 父部门信息
 	private OrgGroup orgGroup;
+
+	public int getCreateId() {
+		return createId;
+	}
+
+	public void setCreateId(int createId) {
+		this.createId = createId;
+	}
+
+	public String getCreateName() {
+		return createName;
+	}
+
+	public void setCreateName(String createName) {
+		this.createName = createName;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
 	public OrgGroup getOrgGroup() {
 		return orgGroup;

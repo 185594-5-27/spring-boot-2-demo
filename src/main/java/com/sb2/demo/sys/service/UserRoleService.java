@@ -2,17 +2,17 @@ package com.sb2.demo.sys.service;
 
 
 import com.sb2.demo.common.base.dao.GenericDao;
+import com.sb2.demo.common.base.entity.Page;
 import com.sb2.demo.common.base.service.GenericService;
+import com.sb2.demo.common.util.user.UserInfo;
 import com.sb2.demo.sys.dao.RoleAssociateTreeDao;
 import com.sb2.demo.sys.dao.UserRoleDao;
-import com.sb2.demo.sys.entity.QueryUserRole;
-import com.sb2.demo.sys.entity.RoleAssociateTree;
-import com.sb2.demo.sys.entity.Tree;
-import com.sb2.demo.sys.entity.UserRole;
+import com.sb2.demo.sys.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +31,26 @@ public class UserRoleService extends GenericService<UserRole, QueryUserRole> {
 	@Override
 	protected GenericDao<UserRole, QueryUserRole> getDao() {
 		return userRoleDao;
+	}
+
+	@Override
+	public Page findByPage(QueryUserRole queryModel) {
+		// 查询组织架构的时候判断当前查询的用户是否有系统管理员权限，若是有则可以查询全部的组织架构
+		if(!UserInfo.hasAuthority("ROLE_ADMIN")){
+			queryModel.setCreateId(UserInfo.getUser().getId());
+		}
+		return super.findByPage(queryModel);
+	}
+
+	@Override
+	public List<UserRole> query(QueryUserRole queryModel) {
+		if(!UserInfo.hasAuthority("ROLE_ADMIN")){
+			if(queryModel==null){
+				queryModel = new QueryUserRole();
+			}
+			queryModel.setCreateId(UserInfo.getUser().getId());
+		}
+		return super.query(queryModel);
 	}
 
 	/**
@@ -66,6 +86,10 @@ public class UserRoleService extends GenericService<UserRole, QueryUserRole> {
 	public boolean save(UserRole entity) throws Exception {
 		entity.packagingTrees(entity.getTreeArray());
 		List<Tree> treeList = entity.getTreeList();
+		User user = UserInfo.getUser();
+		entity.setCreateId(user.getId());
+		entity.setCreateName(user.getUserName());
+		entity.setCreateTime(new Date());
 		boolean success = super.save(entity);
 		for(Tree tree:treeList){
 			roleAssociateTreeDao.save(new RoleAssociateTree(entity.getId(),tree.getId()));

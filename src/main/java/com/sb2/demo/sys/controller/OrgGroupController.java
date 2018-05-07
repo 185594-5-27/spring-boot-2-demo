@@ -141,6 +141,8 @@ public class OrgGroupController extends GenericController<OrgGroup,QueryOrgGroup
         return result;
     }
 
+
+
     private String getMaxNode(String node,String parentNode){
         String max_node = "";
         if(node==null){

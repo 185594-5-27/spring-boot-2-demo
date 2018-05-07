@@ -3,6 +3,7 @@ package com.sb2.demo.sys.service;
 
 import com.sb2.demo.common.base.dao.GenericDao;
 import com.sb2.demo.common.base.service.GenericService;
+import com.sb2.demo.common.util.user.UserInfo;
 import com.sb2.demo.sys.dao.RoleAssociateTreeDao;
 import com.sb2.demo.sys.dao.TreeDao;
 import com.sb2.demo.sys.entity.QueryTree;
@@ -30,6 +31,17 @@ public class TreeService extends GenericService<Tree, QueryTree> {
 	@Override
 	protected GenericDao<Tree, QueryTree> getDao() {
 		return treeDao;
+	}
+
+	@Override
+	public List<Tree> query(QueryTree queryModel) {
+		if(!UserInfo.hasAuthority("ROLE_ADMIN")){
+			if(queryModel==null){
+				queryModel = new QueryTree();
+			}
+			return UserInfo.loadUserBackTree(this);
+		}
+		return super.query(queryModel);
 	}
 
 	/**

@@ -5,12 +5,18 @@
 		<id property="id" column="id"/>
 		<result property="name" column="name"/>
 		<result property="roleName" column="role_name"/>
+		<result property="createId" column="create_id"/>
+		<result property="createName" column="create_name"/>
+		<result property="createTime" column="create_time"/>
 	</resultMap>
 
 	<resultMap type="com.sb2.demo.sys.entity.UserRole" id="UserRoleTreeMap">
 		<id property="id" column="id"/>
 		<result property="name" column="name"/>
 		<result property="roleName" column="role_name"/>
+		<result property="createId" column="create_id"/>
+		<result property="createName" column="create_name"/>
+		<result property="createTime" column="create_time"/>
 		<collection property="treeList"  ofType="com.sb2.demo.sys.entity.Tree" javaType="java.util.ArrayList">
 			<id property="id" column="tree_id"/>
 			<result property="code" column="code"/>
@@ -36,8 +42,8 @@
 
 	<!--保存-->
 	<insert id="save" parameterType="com.sb2.demo.sys.entity.UserRole" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO user_role(name,role_name)
-		VALUES(#{name},#{roleName})
+		INSERT INTO user_role(name,role_name,create_id,create_name,create_time)
+		VALUES(#{name},#{roleName},#{createId},#{createName},#{createTime})
 	</insert>
 
 	<!--修改-->
@@ -53,13 +59,16 @@
 
 	<!--分页查询-->
 	<select id="findByPage" parameterType="com.sb2.demo.sys.entity.QueryUserRole" resultMap="UserRoleMap">
-		SELECT id,name,role_name FROM user_role
+		SELECT id,name,role_name,create_id,create_name,create_time FROM user_role
 		WHERE 1=1
 		<if test="name!=null and name!='' "  >
 		AND name like concat(#{name},'%')
 		</if>
 		<if test="roleName!=null and roleName!='' "  >
 		AND role_name like concat(#{role_name},'%')
+		</if>
+		<if test="createId!=null and createId!='' "  >
+			AND create_id=#{createId}
 		</if>
 		<if test="sort!= null">
 		order by ${sort} ${order}
@@ -77,17 +86,23 @@
 		<if test="roleName!=null and roleName!='' "  >
 			AND role_name like concat(#{role_name},'%')
 		</if>
+		<if test="createId!=null and createId!='' "  >
+			AND create_id=#{createId}
+		</if>
 	</select>
 
 	<!--查询-->
 	<select id="query" parameterType="com.sb2.demo.sys.entity.QueryUserRole" resultMap="UserRoleMap">
-		SELECT id,name,role_name FROM user_role
+		SELECT id,name,role_name,create_id,create_name,create_time FROM user_role
 		WHERE 1=1
 		<if test="name!=null and name!='' "  >
 			AND name like concat(#{name},'%')
 		</if>
 		<if test="roleName!=null and roleName!='' "  >
 			AND role_name like concat(#{role_name},'%')
+		</if>
+		<if test="createId!=null and createId!='' "  >
+			AND create_id=#{createId}
 		</if>
 		<if test="sort!= null">
 		order by ${sort} ${order}

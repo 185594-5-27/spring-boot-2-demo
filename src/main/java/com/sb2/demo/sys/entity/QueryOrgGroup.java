@@ -13,6 +13,15 @@ public class QueryOrgGroup extends QueryBase {
 	private String node;
 	private Long num;
 	private String parentNode;
+	private int createId;
+
+	public int getCreateId() {
+		return createId;
+	}
+
+	public void setCreateId(int createId) {
+		this.createId = createId;
+	}
 
 	public Long getExistingNum() {
 		return existingNum;

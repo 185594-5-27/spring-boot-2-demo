@@ -87,7 +87,6 @@ public class TreeController extends GenericController<Tree,QueryTree> {
      * 功能描述：直接加载整个菜单树的数据(且必须要有管理员权限才可以加载该菜单树的数据)
      * @return
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/loadUserTree",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Map<String,Object> loadUserTree(){

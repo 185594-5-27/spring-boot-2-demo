@@ -9,6 +9,9 @@
 		<result property="node" column="node"/>
 		<result property="num" column="num"/>
 		<result property="parentNode" column="parent_node"/>
+		<result property="createId" column="create_id"/>
+		<result property="createName" column="create_name"/>
+		<result property="createTime" column="create_time"/>
 	</resultMap>
 
 	<!-- 根据父节点来查询最大的节点的值 -->
@@ -23,14 +26,14 @@
 
 	<!--根据主键获取对象-->
 	<select id="get" parameterType="com.sb2.demo.sys.entity.OrgGroup" resultMap="OrgGroupMap">
-		SELECT group_id,existing_num,group_code,name,node,num,parent_node FROM org_group 
+		SELECT group_id,existing_num,group_code,name,node,num,parent_node,create_id,create_name,create_time FROM org_group
 		WHERE group_id=#{groupId}
 	</select>
 
 	<!--保存-->
 	<insert id="save" parameterType="com.sb2.demo.sys.entity.OrgGroup" useGeneratedKeys="true" keyProperty="groupId">
-		INSERT INTO org_group(existing_num,group_code,name,node,num,parent_node)
-		VALUES(#{existingNum},#{groupCode},#{name},#{node},#{num},#{parentNode})
+		INSERT INTO org_group(existing_num,group_code,name,node,num,parent_node,create_id,create_name,create_time)
+		VALUES(#{existingNum},#{groupCode},#{name},#{node},#{num},#{parentNode},#{createId},#{createName},#{createTime})
 	</insert>
 
 	<!--修改-->
@@ -46,7 +49,7 @@
 
 	<!--分页查询-->
 	<select id="findByPage" parameterType="com.sb2.demo.sys.entity.QueryOrgGroup" resultMap="OrgGroupMap">
-		SELECT group_id,existing_num,group_code,name,node,num,parent_node FROM org_group
+		SELECT group_id,existing_num,group_code,name,node,num,parent_node,create_id,create_name,create_time FROM org_group
 		WHERE 1=1
 		<if test="existingNum!=null and existingNum!='' "  >
 		AND existing_num=#{existingNum}
@@ -65,6 +68,9 @@
 		</if>
 		<if test="parentNode!=null and parentNode!='' "  >
 		AND parent_node=#{parentNode}
+		</if>
+		<if test="createId!=null and createId!='' "  >
+			AND create_id=#{createId} or parent_node=0
 		</if>
 		<if test="sort!= null">
 		order by ${sort} ${order}
@@ -94,11 +100,14 @@
 		<if test="parentNode!=null and parentNode!='' ">
 		AND parent_node=#{parentNode}
 		</if>
+		<if test="createId!=null and createId!='' "  >
+			AND create_id=#{createId} or parent_node=0
+		</if>
 	</select>
 
 	<!--查询-->
 	<select id="query" parameterType="com.sb2.demo.sys.entity.QueryOrgGroup" resultMap="OrgGroupMap">
-		SELECT group_id,existing_num,group_code,name,node,num,parent_node FROM org_group
+		SELECT group_id,existing_num,group_code,name,node,num,parent_node,create_id,create_name,create_time FROM org_group
 		WHERE 1=1
 		<if test="existingNum!=null and existingNum!='' ">
 		AND existing_num=#{existingNum}
@@ -117,6 +126,9 @@
 		</if>
 		<if test="parentNode!=null and parentNode!='' ">
 		AND parent_node=#{parentNode}
+		</if>
+		<if test="createId!=null and createId!='' "  >
+			AND create_id=#{createId} or parent_node=0
 		</if>
 		<if test="sort!= null">
 		order by ${sort} ${order}

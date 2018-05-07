@@ -36,6 +36,15 @@ public class User implements UserDetails {
 	private String state;
 	private String type;
 	private Date lastLoginDate;
+	// 用户类型（1：系统用户；2：合伙人）
+	private String userType;
+	// 创建人ID
+	private int createId;
+	// 创建人名字
+	private String createName;
+	// 创建时间
+	private Date createTime;
+
 	// 用户角色信息
 	private List<UserRole> roles;
 	// 权限集合数据
@@ -43,6 +52,37 @@ public class User implements UserDetails {
 	// 所在分组的集合
 	private OrgGroup orgGroup;
 
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
+	public int getCreateId() {
+		return createId;
+	}
+
+	public void setCreateId(int createId) {
+		this.createId = createId;
+	}
+
+	public String getCreateName() {
+		return createName;
+	}
+
+	public void setCreateName(String createName) {
+		this.createName = createName;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
 	public OrgGroup getOrgGroup() {
 		return orgGroup;

@@ -22,6 +22,18 @@ import java.util.*;
 public class UserInfo {
 
 
+    public static List<Tree> loadUserBackTree(TreeService treeService){
+        List<Tree> treeList = new ArrayList<Tree>();
+        Map<Long,Tree> treeMap = new HashMap<Long,Tree>();
+        User user = getUser();
+        for(Tree tree:treeService.loadUserTree(user)){
+            treeMap.put(tree.getId(),tree);
+        }
+        for(long key:treeMap.keySet()){
+            treeList.add(treeMap.get(key));
+        }
+        return treeList;
+    }
 
     /**
      * 功能描述：加载菜单节点的数据
