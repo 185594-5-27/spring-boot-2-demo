@@ -256,8 +256,9 @@ public class GenCodeUtil {
 	 * @param beanName 实体类名称
 	 * @param queryModelName 查询类名称
 	 * @since properties keys include 'db.driver'、'db.username'、'db.password' and 'db.url'
+	 * @param isGenHtml true 生成html false 不生成HTML
 	 * */
-	public static void genFiles(String author, String tableName, String extendsBasePackage, String basePackage, String mybatisBasePath, String htmlBasePath, String beanName, String queryModelName, String properitesUri) throws IOException{
+	public static void genFiles(String author, String tableName, String extendsBasePackage, String basePackage, String mybatisBasePath, String htmlBasePath, String beanName, String queryModelName, String properitesUri,boolean isGenHtml) throws IOException{
 		String packagePath = basePackage.replaceAll("\\.", "/");
 		JdbcUtil.setPropertiesURL(properitesUri);
 		TableModel table = JdbcUtil.getTableStructure(tableName);
@@ -303,21 +304,23 @@ public class GenCodeUtil {
 		fos = new FileOutputStream(fController);
 		fos.write(genController(author, basePackage+".controller", beanName, queryModelName,extendsBasePackage).getBytes());
 		fos.close();
-		// 生成list的html文件
-		String htmlListPath = createFloder(htmlBasePath+toFirstCharLowerCase(beanName));
-		fos = new FileOutputStream(htmlListPath+"/"+toFirstCharLowerCase(beanName)+"List.html");
-		fos.write(HtmlUtil.genListHtml(author,table,toFirstCharLowerCase(beanName)).getBytes());
-		fos.close();
-		// 生成add的html文件
-		String htmlAddPath = createFloder(htmlBasePath+toFirstCharLowerCase(beanName));
-		fos = new FileOutputStream(htmlAddPath+"/add.html");
-		fos.write(HtmlUtil.genAddHtml(author,table,toFirstCharLowerCase(beanName)).getBytes());
-		fos.close();
-		// 生成update的html文件
-		String htmlUpdatePath = createFloder(htmlBasePath+toFirstCharLowerCase(beanName));
-		fos = new FileOutputStream(htmlUpdatePath+"/update.html");
-		fos.write(HtmlUtil.genUpdateHtml(author,table,toFirstCharLowerCase(beanName)).getBytes());
-		fos.close();
+		if(isGenHtml){
+			// 生成list的html文件
+			String htmlListPath = createFloder(htmlBasePath+toFirstCharLowerCase(beanName));
+			fos = new FileOutputStream(htmlListPath+"/"+toFirstCharLowerCase(beanName)+"List.html");
+			fos.write(HtmlUtil.genListHtml(author,table,toFirstCharLowerCase(beanName)).getBytes());
+			fos.close();
+			// 生成add的html文件
+			String htmlAddPath = createFloder(htmlBasePath+toFirstCharLowerCase(beanName));
+			fos = new FileOutputStream(htmlAddPath+"/add.html");
+			fos.write(HtmlUtil.genAddHtml(author,table,toFirstCharLowerCase(beanName)).getBytes());
+			fos.close();
+			// 生成update的html文件
+			String htmlUpdatePath = createFloder(htmlBasePath+toFirstCharLowerCase(beanName));
+			fos = new FileOutputStream(htmlUpdatePath+"/update.html");
+			fos.write(HtmlUtil.genUpdateHtml(author,table,toFirstCharLowerCase(beanName)).getBytes());
+			fos.close();
+		}
 	}
 	/**
 	 * 创建文件夹，防止文件路径不存在
@@ -360,6 +363,6 @@ public class GenCodeUtil {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		genFiles("linzf", "t_score_detail", "com.dinner.snqjf.common.base","com.dinner.snqjf.back", "/resources/mybatis/mapper","/src/main/resources/templates/back/","ScoreDetail", "QueryScoreDetail", "application-dev.properties");
+		genFiles("linzf", "t_score_detail", "com.dinner.snqjf.common.base","com.dinner.snqjf.back", "/resources/mybatis/mapper","/src/main/resources/templates/back/","ScoreDetail", "QueryScoreDetail", "application-dev.properties",true);
 	}
 }
