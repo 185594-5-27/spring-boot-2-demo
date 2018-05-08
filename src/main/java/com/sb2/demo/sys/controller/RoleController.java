@@ -49,7 +49,6 @@ public class RoleController extends GenericController<UserRole,QueryUserRole> {
      * 功能描述：根据用户的权限去加载角色数据
      * @return
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/loadRoleTree",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Map<String,Object> loadRoleTree(UserRole entity){

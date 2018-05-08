@@ -17,6 +17,9 @@
 		<result property="state" column="state"/>
 		<result property="type" column="type"/>
 		<result property="lastLoginDate" column="last_login_date"/>
+		<result property="createId" column="create_id"/>
+		<result property="createName" column="create_name"/>
+		<result property="createTime" column="create_time"/>
 		<association property="orgGroup" javaType="com.sb2.demo.sys.entity.OrgGroup" column="group_id">
 			<id property="groupId" column="group_id"/>
 			<result property="existingNum" column="existing_num"/>
@@ -45,6 +48,9 @@
 		<result property="state" column="state"/>
 		<result property="type" column="type"/>
 		<result property="lastLoginDate" column="last_login_date"/>
+		<result property="createId" column="create_id"/>
+		<result property="createName" column="create_name"/>
+		<result property="createTime" column="create_time"/>
 		<collection property="roles"  ofType="com.sb2.demo.sys.entity.UserRole" javaType="java.util.ArrayList">
 			<result column="user_role_id" property="id" jdbcType="VARCHAR" />
 			<result column="name" property="name" jdbcType="VARCHAR" />
@@ -75,8 +81,8 @@
 
 	<!--保存-->
 	<insert id="save" parameterType="com.sb2.demo.sys.entity.User" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO user(login,password,user_name,address,job,group_id,birth_date,city,district,province,street_address,state,type,last_login_date)
-		VALUES(#{login},#{password},#{userName},#{address},#{job},#{orgGroup.groupId},#{birthDate},#{city},#{district},#{province},#{streetAddress},#{state},#{type},#{lastLoginDate})
+		INSERT INTO user(login,password,user_name,address,job,group_id,birth_date,city,district,province,street_address,state,type,last_login_date,create_id,create_name,create_time)
+		VALUES(#{login},#{password},#{userName},#{address},#{job},#{orgGroup.groupId},#{birthDate},#{city},#{district},#{province},#{streetAddress},#{state},#{type},#{lastLoginDate},#{createId},#{createName},#{createTime})
 	</insert>
 
 	<!--修改-->
@@ -96,6 +102,9 @@
 		WHERE 1=1
 		<if test="userName!=null and userName!='' ">
 			AND u.user_name like concat(#{userName},'%')
+		</if>
+		<if test="createId!=null and createId!='' "  >
+			AND u.create_id=#{createId}
 		</if>
 		<if test="orgGroup!=null">
 			<if test="orgGroup.parentNode!=null and orgGroup.parentNode!='' ">
@@ -117,6 +126,9 @@
 		WHERE 1=1
 		<if test="userName!=null and userName!='' ">
 			AND u.user_name like concat(#{userName},'%')
+		</if>
+		<if test="createId!=null and createId!='' "  >
+			AND u.create_id=#{createId}
 		</if>
 		<if test="orgGroup!=null">
 			<if test="orgGroup.parentNode!=null and orgGroup.parentNode!='' ">
@@ -174,6 +186,9 @@
 		<if test="lastLoginDate!=null and lastLoginDate!='' ">
 		AND u.last_login_date=#{lastLoginDate}
 		</if>
+		<if test="createId!=null and createId!='' "  >
+			AND u.create_id=#{createId}
+		</if>
 		<if test="sort!= null and sort!='' ">
 		order by ${sort} ${order}
 		</if>
@@ -226,6 +241,9 @@
 		<if test="lastLoginDate!=null and lastLoginDate!='' ">
 			AND last_login_date=#{lastLoginDate}
 		</if>
+		<if test="createId!=null and createId!='' "  >
+			AND create_id=#{createId}
+		</if>
 		<if test="sort!= null and sort!='' ">
 			order by ${sort} ${order}
 		</if>
@@ -276,6 +294,9 @@
 		</if>
 		<if test="lastLoginDate!=null and lastLoginDate!='' ">
 			AND last_login_date=#{lastLoginDate}
+		</if>
+		<if test="createId!=null and createId!='' "  >
+			AND create_id=#{createId}
 		</if>
 		<if test="sort!= null and sort!='' ">
 			order by ${sort} ${order}

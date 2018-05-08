@@ -22,6 +22,16 @@ public class QueryUser extends QueryBase {
 	private String type;
 	private String lastLoginDate;
 	private OrgGroup orgGroup;
+	// 创建人ID
+	private int createId;
+
+	public int getCreateId() {
+		return createId;
+	}
+
+	public void setCreateId(int createId) {
+		this.createId = createId;
+	}
 
 	public OrgGroup getOrgGroup() {
 		return orgGroup;

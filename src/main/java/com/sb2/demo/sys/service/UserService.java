@@ -7,15 +7,13 @@ import com.sb2.demo.common.base.service.GenericService;
 import com.sb2.demo.common.util.user.UserInfo;
 import com.sb2.demo.sys.dao.UserAssociateRoleDao;
 import com.sb2.demo.sys.dao.UserDao;
-import com.sb2.demo.sys.entity.QueryUser;
-import com.sb2.demo.sys.entity.User;
-import com.sb2.demo.sys.entity.UserAssociateRole;
-import com.sb2.demo.sys.entity.UserRole;
+import com.sb2.demo.sys.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,11 +35,35 @@ public class UserService extends GenericService<User, QueryUser> {
 		return userDao;
 	}
 
+	@Override
+	public Page findByPage(QueryUser queryModel) {
+		// 查询组织架构的时候判断当前查询的用户是否有系统管理员权限，若是有则可以查询全部的组织架构
+		if(!UserInfo.hasAuthority("ROLE_ADMIN")){
+			queryModel.setCreateId(UserInfo.getUser().getId());
+		}
+		return super.findByPage(queryModel);
+	}
+
+	@Override
+	public List<User> query(QueryUser queryModel) {
+		if(!UserInfo.hasAuthority("ROLE_ADMIN")){
+			if(queryModel==null){
+				queryModel = new QueryUser();
+			}
+			queryModel.setCreateId(UserInfo.getUser().getId());
+		}
+		return super.query(queryModel);
+	}
+
 	/**
 	 * 分页查询组织架构底下的用户
 	 * @param queryUser 查询条件
 	 *  */
 	public Page findByGroupUserPage(QueryUser queryUser){
+		// 查询组织架构的时候判断当前查询的用户是否有系统管理员权限，若是有则可以查询全部的组织架构
+		if(!UserInfo.hasAuthority("ROLE_ADMIN")){
+			queryUser.setCreateId(UserInfo.getUser().getId());
+		}
 		List<User> list =  userDao.findGroupUserByPage(queryUser);
 		int count = userDao.countGroupUser(queryUser);
 		return new Page(list, count);
@@ -55,6 +77,10 @@ public class UserService extends GenericService<User, QueryUser> {
 	 */
 	@Override
 	public boolean save(User entity) throws Exception {
+		User user = UserInfo.getUser();
+		entity.setCreateId(user.getId());
+		entity.setCreateName(user.getUserName());
+		entity.setCreateTime(new Date());
 		entity.setAddress(entity.getProvince()+entity.getCity()+entity.getDistrict()+entity.getStreetAddress());
 		entity.setPassword(UserInfo.encode(entity.getPassword()));
 		entity.setState("1");
