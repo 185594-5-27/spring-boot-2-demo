@@ -4,6 +4,8 @@ package com.sb2.demo.sys.controller;
 import com.sb2.demo.common.base.constant.SystemStaticConst;
 import com.sb2.demo.common.base.controller.GenericController;
 import com.sb2.demo.common.base.service.GenericService;
+import com.sb2.demo.common.util.json.GsonHelper;
+import com.sb2.demo.common.util.json.JsonHelper;
 import com.sb2.demo.sys.entity.QueryUserRole;
 import com.sb2.demo.sys.entity.Tree;
 import com.sb2.demo.sys.entity.UserRole;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.inject.Inject;
+import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +46,19 @@ public class RoleController extends GenericController<UserRole,QueryUserRole> {
     @Override
     protected GenericService<UserRole, QueryUserRole> getService() {
         return userRoleService;
+    }
+
+    @Override
+    public Map<String, Object> removeBath(String json) throws Exception {
+        Map<String,Object> result = new HashMap<String, Object>();
+        if(userRoleService.removeBath((List<UserRole>)JsonHelper.toList(json,UserRole.class))){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
+            result.put(SystemStaticConst.MSG,"删除数据成功！");
+        }else{
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"删除数据失败！请先删除该角色与之关联的用户，再来删除相应的角色！");
+        }
+        return result;
     }
 
     /**

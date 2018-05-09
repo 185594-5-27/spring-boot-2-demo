@@ -44,6 +44,19 @@ public class OrgGroupController extends GenericController<OrgGroup,QueryOrgGroup
         return orgGroupService;
     }
 
+    @Override
+    public Map<String, Object> remove(OrgGroup entity) throws Exception {
+        Map<String,Object> result = new HashMap<String, Object>();
+        if(orgGroupService.delete(entity)){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
+            result.put(SystemStaticConst.MSG,"删除数据成功！");
+        }else{
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"删除数据失败！该组织架构底下还存在用户，请先移除该组织架构底下的用户再来删除组织架构！");
+        }
+        return result;
+    }
+
     /**
      * 功能描述：跳转到更新用户的页面
      * @param entity

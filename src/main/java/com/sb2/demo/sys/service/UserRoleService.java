@@ -6,6 +6,7 @@ import com.sb2.demo.common.base.entity.Page;
 import com.sb2.demo.common.base.service.GenericService;
 import com.sb2.demo.common.util.user.UserInfo;
 import com.sb2.demo.sys.dao.RoleAssociateTreeDao;
+import com.sb2.demo.sys.dao.UserAssociateRoleDao;
 import com.sb2.demo.sys.dao.UserRoleDao;
 import com.sb2.demo.sys.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,22 @@ public class UserRoleService extends GenericService<UserRole, QueryUserRole> {
 	@SuppressWarnings("SpringJavaAutowiringInspection")
 	private RoleAssociateTreeDao roleAssociateTreeDao;
 
+	@Autowired
+	private UserAssociateRoleDao userAssociateRoleDao;
+
 	@Override
 	protected GenericDao<UserRole, QueryUserRole> getDao() {
 		return userRoleDao;
+	}
+
+	@Override
+	public boolean delete(UserRole entity) throws Exception {
+		QueryUserAssociateRole queryUserAssociateRole = new QueryUserAssociateRole();
+		queryUserAssociateRole.setRoleId(entity.getId());
+		if(userAssociateRoleDao.query(queryUserAssociateRole).size()>0){
+			return false;
+		}
+		return super.delete(entity);
 	}
 
 	@Override

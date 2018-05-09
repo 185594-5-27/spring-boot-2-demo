@@ -6,8 +6,10 @@ import com.sb2.demo.common.base.entity.Page;
 import com.sb2.demo.common.base.service.GenericService;
 import com.sb2.demo.common.util.user.UserInfo;
 import com.sb2.demo.sys.dao.OrgGroupDao;
+import com.sb2.demo.sys.dao.UserDao;
 import com.sb2.demo.sys.entity.OrgGroup;
 import com.sb2.demo.sys.entity.QueryOrgGroup;
+import com.sb2.demo.sys.entity.QueryUser;
 import com.sb2.demo.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,12 +24,27 @@ import java.util.List;
 @Service("orgGroupService")
 @Transactional(rollbackFor={IllegalArgumentException.class})
 public class OrgGroupService extends GenericService<OrgGroup, QueryOrgGroup> {
+
 	@Autowired
-	@SuppressWarnings("SpringJavaAutowiringInspection")
 	private OrgGroupDao orgGroupDao;
+
+	@Autowired
+	private UserDao userDao;
+
+
 	@Override
 	protected GenericDao<OrgGroup, QueryOrgGroup> getDao() {
 		return orgGroupDao;
+	}
+
+	@Override
+	public boolean delete(OrgGroup entity) throws Exception {
+		QueryUser queryUser = new QueryUser();
+		queryUser.setOrgGroup(entity);
+		if(userDao.countGroupUser(queryUser)>0){
+			return false;
+		}
+		return super.delete(entity);
 	}
 
 	@Override

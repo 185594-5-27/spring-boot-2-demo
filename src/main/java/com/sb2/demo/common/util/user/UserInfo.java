@@ -27,7 +27,9 @@ public class UserInfo {
         Map<Long,Tree> treeMap = new HashMap<Long,Tree>();
         User user = getUser();
         for(Tree tree:treeService.loadUserTree(user)){
-            treeMap.put(tree.getId(),tree);
+            if(tree.getId()>12){
+                treeMap.put(tree.getId(),tree);
+            }
         }
         for(long key:treeMap.keySet()){
             treeList.add(treeMap.get(key));

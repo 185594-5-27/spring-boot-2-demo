@@ -88,6 +88,8 @@
                                    if(e.result){
                                        window.Ewin.alert({message:e.msg});
                                        doQuery();
+                                   }else{
+                                       window.Ewin.alert({message:e.msg});
                                    }
                                 });
                             }
@@ -126,6 +128,24 @@
                     align : 'center',
                     valign : 'middle',
                     sortable : true
+                },
+                {
+                    field : 'createName',
+                    title : '创建人名称',
+                    align : 'center',
+                    valign : 'middle',
+                    sortable : true
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间',
+                    align : 'center',
+                    valign : 'middle',
+                    sortable : true,
+                    formatter: function (value, row, index) {
+                        var dt = new Date(value).format('yyyy-MM-dd hh:mm:ss');
+                        return dt;
+                    }
                 }]
         });
     }

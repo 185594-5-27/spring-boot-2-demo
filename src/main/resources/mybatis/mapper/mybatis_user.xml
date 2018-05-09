@@ -113,6 +113,9 @@
 			<if test="orgGroup.node!=null and orgGroup.node!='' ">
 				AND og.node like concat(#{orgGroup.node},'%')
 			</if>
+			<if test="orgGroup.groupId!=null and orgGroup.groupId!='' ">
+				AND og.group_id = #{orgGroup.groupId}
+			</if>
 		</if>
 		<if test="sort!= null and sort!='' ">
 			order by ${sort} ${order}
@@ -136,6 +139,9 @@
 			</if>
 			<if test="orgGroup.node!=null and orgGroup.node!='' ">
 				AND og.node like concat(#{orgGroup.node},'%')
+			</if>
+			<if test="orgGroup.groupId!=null and orgGroup.groupId!='' ">
+				AND og.group_id = #{orgGroup.groupId}
 			</if>
 		</if>
 	</select>

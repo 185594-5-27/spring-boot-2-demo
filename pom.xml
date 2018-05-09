@@ -29,6 +29,12 @@
 
 	<dependencies>
 
+		<!--Gson-->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+
 		<!-- 集成Druid数据库连接池和监控 -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
