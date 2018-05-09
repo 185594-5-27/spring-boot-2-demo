@@ -27,18 +27,18 @@ public class Tree implements Comparable<Tree> {
 	// 菜单节点是否选中的状态
 	private boolean checked;
 	// 当前菜单节点类型（1：菜单节点；2：按钮节点）
-	private boolean type;
+	private String type;
 
 	// 父菜单信息
 	private Tree tree;
 	// 子菜单节点信息
 	private List<Tree> child = new ArrayList<Tree>();
 
-	public boolean isType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(boolean type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

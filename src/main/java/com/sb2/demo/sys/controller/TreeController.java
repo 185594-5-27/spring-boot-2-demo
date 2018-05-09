@@ -3,6 +3,7 @@ package com.sb2.demo.sys.controller;
 
 import com.sb2.demo.common.base.constant.SystemStaticConst;
 import com.sb2.demo.common.base.controller.GenericController;
+import com.sb2.demo.common.base.entity.Page;
 import com.sb2.demo.common.base.service.GenericService;
 import com.sb2.demo.sys.entity.QueryTree;
 import com.sb2.demo.sys.entity.Tree;
@@ -38,6 +39,21 @@ public class TreeController extends GenericController<Tree,QueryTree> {
     @Override
     protected GenericService<Tree, QueryTree> getService() {
         return treeService;
+    }
+
+    /**
+     * 功能描述：获取菜单底下的按钮节点数据
+     * @param queryTree
+     * @return
+     */
+    @RequestMapping(value="/treeButtonList",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> treeButtonList(QueryTree queryTree){
+        Map<String,Object> result = new HashMap<String, Object>();
+        Page page = treeService.findByPage(queryTree);
+        result.put("totalCount",page.getTotal());
+        result.put("result",page.getRows());
+        return result;
     }
 
     /**
@@ -89,9 +105,9 @@ public class TreeController extends GenericController<Tree,QueryTree> {
      */
     @RequestMapping(value = "/loadUserTree",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String,Object> loadUserTree(){
+    public Map<String,Object> loadUserTree(QueryTree queryTree){
         Map<String,Object> result = new HashMap<String, Object>();
-        List<Tree> treeList = treeService.query(null);
+        List<Tree> treeList = treeService.query(queryTree);
         result.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
         result.put(SystemStaticConst.MSG,"加载菜单数据成功！");
         result.put("data",treeMapper.treesToTressDTOs(treeList));

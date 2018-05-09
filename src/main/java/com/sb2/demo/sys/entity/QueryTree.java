@@ -15,13 +15,13 @@ public class QueryTree extends QueryBase {
 	private String url;
 	private String state;
 	// 当前菜单节点类型（1：菜单节点；2：按钮节点）
-	private boolean type;
+	private String type;
 
-	public boolean isType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(boolean type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

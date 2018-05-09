@@ -6,6 +6,25 @@
     <div class="col-md-3 " style="margin-top: 10px;">
         <ul id="menu_tree" class="ztree" style="width:560px; overflow:auto;"></ul>
     </div>
+    <div class="col-md-9">
+        <div class="panel panel-default" style="margin-top: 10px;">
+            <div class="panel-heading" id="treeButtonTitle">查询条件</div>
+            <div class="panel-body">
+                <form class="form-inline" role="form" style="float: left; width: 100%;" method="post" id="queryTreeButton">
+                    <input type="hidden" id="pId" name="pId" value="" />
+                    <div class="form-group">
+                        <label for="name">按钮名字:</label>
+                        <input type="text" class="form-control" name="name" id="name"  placeholder="请输入按钮名字" />
+                    </div>
+                    <div class="form-group">
+                        <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table id="tree-button-table" style="margin-top: -50px;">
+        </table>
+    </div>
 </div>
 <script th:inline="javascript">
     var zTree;
@@ -29,7 +48,7 @@
         if (btn) btn.bind("click", function(){
             zTree = $.fn.zTree.getZTreeObj("menu_tree");
             selectNode = treeNode;
-            window.Ewin.dialog({title:"添加",url:"tree/addTreePage?id="+treeNode.id,width:winWidth<=415?winWidth-20:400,height:650})
+            window.Ewin.dialog({title:"添加",url:"tree/addTreePage?id="+treeNode.id,width:winWidth<=415?winWidth-20:600,height:400})
             return false;
         });
         var remove_btn = $("#removeBtn_"+treeNode.tId);
@@ -57,14 +76,14 @@
         if (edit_btn) edit_btn.bind("click", function(){
             zTree = $.fn.zTree.getZTreeObj("menu_tree");
             selectNode = treeNode;
-            window.Ewin.dialog({title:"修改",url:"tree/updateTreePage?id="+treeNode.id,width:winWidth<=415?winWidth-20:400,height:650})
+            window.Ewin.dialog({title:"修改",url:"tree/updateTreePage?id="+treeNode.id,width:winWidth<=415?winWidth-20:600,height:400})
             return false;
         });
         var add_parent_btn = $("#addParentBtn_"+treeNode.tId);
         if (add_parent_btn) add_parent_btn.bind("click", function(){
             zTree = $.fn.zTree.getZTreeObj("menu_tree");
             selectNode = null;
-            window.Ewin.dialog({title:"添加",url:"tree/addTreePage",width:winWidth<=415?winWidth-20:400,height:650})
+            window.Ewin.dialog({title:"添加",url:"tree/addTreePage",width:winWidth<=415?winWidth-20:600,height:400})
             return false;
         })
     };
@@ -98,6 +117,9 @@
         callback: {
             beforeClick: function(treeId, treeNode) {
                 var zTree = $.fn.zTree.getZTreeObj('menu_tree');
+                $("#pId").attr("value",treeNode.id);
+                $("#treeButtonTitle").html("查询条件（"+treeNode.name+"）")
+                doQuery();
                 if (treeNode.isParent) {
                     zTree.expandNode(treeNode);
                     return false;
@@ -120,11 +142,118 @@
     }
 
     $(function() {
-        $.post("/tree/loadUserTree",function(info){
+        $.post("/tree/loadUserTree?type=1",function(info){
             var t = $("#menu_tree");
             t = $.fn.zTree.init(t, setting,info.data);
+            initTable();
+            // 展开所有的菜单节点
+            t.expandAll(true);
         })
     });
+
+    function doQuery(){
+        // 移除遮罩层的属性否则会导致在移动端无法显示滚动条
+        $('body').removeClass("modal-open");
+        $('#tree-button-table').bootstrapTable('refresh');    //刷新表格
+    }
+
+    function initTable(){
+        $('#tree-button-table').bootstrapTable({
+            url:"tree/treeButtonList?type=2",
+            height:  winWidth<=415?621:$(window.parent.document).find("#wrapper").height() - 252,
+            width:$(window).width(),
+            showColumns:true,
+            formId :"queryTreeButton",
+            pagination : true,
+            sortName : 'id',
+            sortOrder : 'desc',
+            clickToSelect: true,// 单击某一行的时候选中某一条记录
+            pageSize : winWidth<=415?3:13,
+            cardView : winWidth<=415?true:false,// 根据屏幕大小来决定是否试图展示
+            toolbars:[
+                {
+                    text: '添加',
+                    iconCls: 'glyphicon glyphicon-plus',
+                    handler: function () {
+                        window.Ewin.dialog({title:"添加",url:"group/addUserPage",gridId:"gridId",width:winWidth<=415?winWidth-20:600,height:winWidth<=415?505:530})
+                    }
+                },
+                {
+                    text: '修改',
+                    iconCls: 'glyphicon glyphicon-pencil',
+                    handler: function () {
+                        var rows = $('#group-user-table').bootstrapTable('getSelections');
+                        if(rows.length==0||rows.length>1){
+                            window.Ewin.alert({message:'请选择一条需要修改的数据!'});
+                            return false;
+                        }
+                        window.Ewin.dialog({title:"修改",url:"group/updateUserPage?id="+rows[0].id,gridId:"gridId",width:winWidth<=415?winWidth-20:470,height:460});
+                    }
+                },
+                {
+                    text: '删除',
+                    iconCls: 'glyphicon glyphicon-remove',
+                    handler: function () {
+                        var rows = $('#group-user-table').bootstrapTable('getSelections');
+                        if(rows.length==0){
+                            window.Ewin.alert({message:'请选择一条需要删除的数据!'});
+                            return false;
+                        }
+                        window.Ewin.confirm({title:'提示',message:'是否要删除您所选择的记录？',width:500}).on(function (e) {
+                            if (e) {
+                                $.post("user/removeBath",{json:JSON.stringify(rows)},function(e){
+                                    if(e.result){
+                                        window.Ewin.alert({message:e.msg});
+                                        doQuery();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            ],
+            columns: [
+                {
+                    checkbox: true
+                },
+                {
+                    field: '',
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return index+1;
+                    }
+                },
+                {
+                    field : 'id',
+                    title : '用户流水',
+                    align : 'center',
+                    valign : 'middle',
+                    hide : false,
+                    sortable : true
+                },
+                {
+                    field : 'name',
+                    title : '按钮名字',
+                    align : 'center',
+                    valign : 'middle',
+                    sortable : true
+                },
+                {
+                    field : 'code',
+                    title : '按钮编码',
+                    align : 'center',
+                    valign : 'middle',
+                    sortable : true
+                },
+                {
+                    field : 'state',
+                    title : '按钮状态',
+                    align : 'center',
+                    valign : 'middle',
+                    sortable : true
+                }]
+        });
+    }
 
 </script>
 </body>
