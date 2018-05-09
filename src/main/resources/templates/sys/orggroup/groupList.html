@@ -2,6 +2,11 @@
 >
 <head th:include="include/includebase"></head>
 <body>
+<style type="text/css">
+    .ztree li span.button.switch.level0 {visibility:hidden; width:1px;}
+    .ztree li ul.level0 {padding:0; background:none;}
+</style>
+
 <div id="content" class="row-fluid">
     <div class="col-md-3 " style="margin-top: 10px;">
         <ul id="tree" class="ztree" style="width:560px; overflow:auto;"></ul>
@@ -147,6 +152,8 @@
             $("#groupQueryTitle").html("查询条件（"+$.fn.zTree.getZTreeObj('tree').getNodes()[0].name+"）")
             initTable();
             $('#group-user-table').bootstrapTable('hideColumn', 'id');
+            // 展开所有的菜单节点
+            t.expandAll(true);
         })
     });
 

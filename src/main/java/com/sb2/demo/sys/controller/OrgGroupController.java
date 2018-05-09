@@ -148,6 +148,7 @@ public class OrgGroupController extends GenericController<OrgGroup,QueryOrgGroup
     public Map<String,Object> loadGroupTree(){
         Map<String,Object> result = new HashMap<String, Object>();
         List<OrgGroup> orgGroupList = orgGroupService.query(null);
+
         result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
         result.put(SystemStaticConst.MSG,"加载组织机构数据成功！");
         result.put("data",orgGroupList);
