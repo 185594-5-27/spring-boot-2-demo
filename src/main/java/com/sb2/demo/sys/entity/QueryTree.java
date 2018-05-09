@@ -14,6 +14,16 @@ public class QueryTree extends QueryBase {
 	private Long treeOrder;
 	private String url;
 	private String state;
+	// 当前菜单节点类型（1：菜单节点；2：按钮节点）
+	private boolean type;
+
+	public boolean isType() {
+		return type;
+	}
+
+	public void setType(boolean type) {
+		this.type = type;
+	}
 
 	public String getCode() {
 		return code;

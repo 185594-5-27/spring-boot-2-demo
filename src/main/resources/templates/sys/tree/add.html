@@ -32,10 +32,22 @@
         <label  class='radio-inline'><input type='radio' name='state' value='1'  checked="checked"  />可用</label>
         <label  class='radio-inline'><input type='radio' name='state' value='0'   />禁用</label>
     </div>
+    <div class="form-group"  id="treeType">
+        <label>菜单类型:</label>
+    </div>
+
 </form>
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
+
+        $.fn.radioLoad({
+            type:"TREE_TYPE",
+            id:"treeType",
+            name:"type",
+            checkedValue:'1'
+        });
+
         $('#treeForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
