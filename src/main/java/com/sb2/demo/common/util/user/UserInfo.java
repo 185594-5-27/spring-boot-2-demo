@@ -22,12 +22,17 @@ import java.util.*;
 public class UserInfo {
 
 
+    /**
+     * 功能描述:加载用户的菜单和按钮数据
+     * @param treeService
+     * @return
+     */
     public static List<Tree> loadUserBackTree(TreeService treeService){
         List<Tree> treeList = new ArrayList<Tree>();
         Map<Long,Tree> treeMap = new HashMap<Long,Tree>();
         User user = getUser();
-        for(Tree tree:treeService.loadUserTree(user)){
-            if(tree.getId()>12){
+        for(Tree tree:treeService.loadUserTreeAndButton(user)){
+            if(tree.getId()>55){
                 treeMap.put(tree.getId(),tree);
             }
         }

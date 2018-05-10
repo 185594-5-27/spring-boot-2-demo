@@ -66,6 +66,8 @@
                 {
                     text: '添加',
                     iconCls: 'glyphicon glyphicon-plus',
+                    code : 'add_sys_dict',
+                    verify : true,// true 表示需要经过权限验证，false表示不需要经过权限验证
                     handler: function () {
                          window.Ewin.dialog({title:"添加",url:"dict/addPage",gridId:"gridId",width:winWidth<=415?winWidth-20:400,height:500})
                     }
@@ -73,6 +75,8 @@
                 {
                     text: '修改',
                     iconCls: 'glyphicon glyphicon-pencil',
+                    code : 'edit_sys_dict',
+                    verify : true,// true 表示需要经过权限验证，false表示不需要经过权限验证
                     handler: function () {
                         var rows = $('#dict-table').bootstrapTable('getSelections');
                         if(rows.length==0||rows.length>1){
@@ -85,6 +89,8 @@
                 {
                     text: '删除',
                     iconCls: 'glyphicon glyphicon-remove',
+                    code : 'remove_sys_dict',
+                    verify : true,// true 表示需要经过权限验证，false表示不需要经过权限验证
                     handler: function () {
                         var rows = $('#dict-table').bootstrapTable('getSelections');
                         if(rows.length==0){

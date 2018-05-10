@@ -39,7 +39,7 @@
                         notEmpty: {
                             message: '权限代码不能为空'
                         },
-                        threshold :  2 , //有6字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
+                        threshold :  2 , //有2字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
                         remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
                             url: "role/isExist",//验证地址
                             data:function(validator) {// 获取需要传送到后台的验证的数据
@@ -79,7 +79,7 @@
             $("#treeArray").attr("value",treeArray);
             // 此段是为防止需要点击两次按钮来实现验证的方法，若不添加此处的放行，那么我们将要点击两次确定按钮才可以提交验证
             var name = $("#name").val();
-            // 判断当前的code又值，且当前不存在错误验证方可放开该字段的验证
+            // 判断当前的name有值，且当前不存在错误验证方可放开该字段的验证
             if(name != null && name != ""&&$("#name").parent("div").find('.glyphicon-remove').length==0){
                 $('#roleForm').bootstrapValidator('enableFieldValidators', 'name', false);
             } else {

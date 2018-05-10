@@ -32,7 +32,8 @@
         })
         //
         $.fn.bootstrapTree({url:"/user/mainTree",treeId:'menu_tree',tabId:"tabContainer"});
-        $.fn.dictUtil("/dict/loadDict");
+        $.fn.dictUtil({url:"/dict/loadDict"});
+        $.fn.treeButton({url:"/tree/loadTreeButton?type=2"});
     });
 </script>
 <body >

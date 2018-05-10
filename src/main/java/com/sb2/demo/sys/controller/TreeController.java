@@ -5,6 +5,7 @@ import com.sb2.demo.common.base.constant.SystemStaticConst;
 import com.sb2.demo.common.base.controller.GenericController;
 import com.sb2.demo.common.base.entity.Page;
 import com.sb2.demo.common.base.service.GenericService;
+import com.sb2.demo.common.util.user.UserInfo;
 import com.sb2.demo.sys.entity.QueryTree;
 import com.sb2.demo.sys.entity.Tree;
 import com.sb2.demo.sys.mapper.TreeMapper;
@@ -39,6 +40,36 @@ public class TreeController extends GenericController<Tree,QueryTree> {
     @Override
     protected GenericService<Tree, QueryTree> getService() {
         return treeService;
+    }
+
+    /**
+     * 功能描述：跳转到修改菜单按钮节点的页面
+     * @param entity
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value="/updateTreeButtonPage")
+    public String updateTreeButtonPage(Tree entity,Model model) throws Exception{
+        entity = treeService.get(entity);
+        Tree pTree = treeService.get(new Tree(entity.getpId()));
+        entity.setTree(pTree);
+        model.addAttribute("entity",entity);
+        return getPageBaseRoot()+"/updateButton";
+    }
+
+    /**
+     * 功能描述：跳转到增加菜单按钮节点的页面
+     * @param entity
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value="/addTreeButtonPage")
+    public String addTreeButtonPage(Tree entity,Model model) throws Exception{
+        entity = treeService.get(entity);
+        model.addAttribute("entity",entity);
+        return getPageBaseRoot()+"/addButton";
     }
 
     /**
@@ -100,7 +131,7 @@ public class TreeController extends GenericController<Tree,QueryTree> {
     }
 
     /**
-     * 功能描述：直接加载整个菜单树的数据(且必须要有管理员权限才可以加载该菜单树的数据)
+     * 功能描述：直接加载整个菜单树的数据
      * @return
      */
     @RequestMapping(value = "/loadUserTree",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
@@ -108,6 +139,21 @@ public class TreeController extends GenericController<Tree,QueryTree> {
     public Map<String,Object> loadUserTree(QueryTree queryTree){
         Map<String,Object> result = new HashMap<String, Object>();
         List<Tree> treeList = treeService.query(queryTree);
+        result.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
+        result.put(SystemStaticConst.MSG,"加载菜单数据成功！");
+        result.put("data",treeMapper.treesToTressDTOs(treeList));
+        return result;
+    }
+
+    /**
+     * 功能描述：根据当前登陆的用户来加载相应的按钮数据
+     * @return
+     */
+    @RequestMapping(value = "/loadTreeButton",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> loadTreeButton(QueryTree queryTree){
+        Map<String,Object> result = new HashMap<String, Object>();
+        List<Tree> treeList = treeService.loadUserButton(UserInfo.getUser());
         result.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
         result.put(SystemStaticConst.MSG,"加载菜单数据成功！");
         result.put("data",treeMapper.treesToTressDTOs(treeList));

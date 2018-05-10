@@ -83,6 +83,7 @@
                 {
                     text: '添加',
                     iconCls: 'glyphicon glyphicon-plus',
+                    code : 'add_sys_user',
                     handler: function () {
                         window.Ewin.dialog({title:"添加",url:"user/addPage",gridId:"gridId",width:winWidth<=415?winWidth-20:600,height:winWidth<=415?505:530})
                     }
@@ -90,6 +91,7 @@
                 {
                     text: '修改',
                     iconCls: 'glyphicon glyphicon-pencil',
+                    code : 'edit_sys_user',
                     handler: function () {
                         var rows = $('#user-table').bootstrapTable('getSelections');
                         if(rows.length==0||rows.length>1){
@@ -102,6 +104,7 @@
                 {
                     text: '删除',
                     iconCls: 'glyphicon glyphicon-remove',
+                    code : 'remove_sys_user',
                     handler: function () {
                         var rows = $('#user-table').bootstrapTable('getSelections');
                         if(rows.length==0){

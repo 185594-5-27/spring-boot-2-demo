@@ -1104,6 +1104,13 @@
             toolbargroup.setAttribute("class","columns columns-left btn-group pull-left");
             for(var i=0;i<this.options.toolbars.length;i++){
                 var toolbar = document.createElement("button");
+                // 需要做权限过滤
+                if(this.options.toolbars[i].verify==undefined||this.options.toolbars[i].verify==true){
+                    // 判断当前用户是否有当前节点的权限
+                    if(!getTreeButton(this.options.toolbars[i].code)){
+                        continue;
+                    }
+                }
                 toolbar.setAttribute("class", "btn btn-default");
                 toolbar.onclick = this.options.toolbars[i].handler;
                 toolbar.innerHTML = "<span class='"+this.options.toolbars[i].iconCls+"' aria-hidden='true'></span>"+this.options.toolbars[i].text;

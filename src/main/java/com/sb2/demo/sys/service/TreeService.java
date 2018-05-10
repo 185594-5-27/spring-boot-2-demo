@@ -52,8 +52,23 @@ public class TreeService extends GenericService<Tree, QueryTree> {
 	 */
 	@Override
 	public boolean delete(Tree entity) throws Exception {
+		Tree old = treeDao.get(entity);
+		old.setpId(old.getId());
+		// 删除按钮节点数据
+		roleAssociateTreeDao.removeTreeByTreeId(old);
+		treeDao.deleteByPId(old);
+		// 删除当前菜单节点的数据
 		roleAssociateTreeDao.removeTreeByTreeId(entity);
 		return super.delete(entity);
+	}
+
+	/**
+	 * 功能描述：加载菜单和按钮数据
+	 * @param user
+	 * @return
+	 */
+	public List<Tree> loadUserTreeAndButton(User user){
+		return treeDao.loadUserTreeAndButton(user);
 	}
 
 	/**
@@ -64,4 +79,15 @@ public class TreeService extends GenericService<Tree, QueryTree> {
 	public List<Tree> loadUserTree(User user){
 		return treeDao.loadUserTree(user);
 	}
+
+	/**
+	 * 功能描述：加载用户的按钮的数据
+	 * @param user
+	 * @return
+			 */
+	public List<Tree> loadUserButton(User user){
+		return treeDao.loadUserButton(user);
+	}
+
+
 }
